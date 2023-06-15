@@ -5,16 +5,16 @@ import { ILoginEmailPasswordSchema, loginEmailPasswordSchema } from "@/schemas";
 import { Alert, Box, Button, TextField, } from "@mui/material";
 import { IProperty, WithId } from "@bitmetro/identity";
 import { useLoginWithEmailAndPassword } from "@/state/identity";
-import { useRouter } from "next/router";
 import Link from "next/link";
-import { createForwardUrl, getForwardUrl } from "@/utils";
+import { getForwardUrl } from "@/utils";
+import { useReturnWithAccessToken } from "@/hooks/return.hook";
 
 interface Props {
   property: WithId<IProperty>;
 }
 
 export const LoginWithEmailAndPassword: React.FC<Props> = ({ property }) => {
-  const router = useRouter();
+  const returnWithAccessToken = useReturnWithAccessToken();
 
   const {
     control,
@@ -34,14 +34,7 @@ export const LoginWithEmailAndPassword: React.FC<Props> = ({ property }) => {
 
   useEffect(() => {
     if (loginStatus === "success") {
-      const accessToken = loginResult?.accessToken || "";
-
-      if (!!window.opener) {
-        window.opener.postMessage({ accessToken }, '*');
-        window.close();
-      } else {
-        router.push(createForwardUrl(accessToken));
-      }
+      returnWithAccessToken(loginResult?.accessToken || "");
     }
   }, [loginStatus]);
 

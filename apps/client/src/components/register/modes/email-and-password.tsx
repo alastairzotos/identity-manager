@@ -6,15 +6,15 @@ import { Alert, Box, Button, TextField } from "@mui/material";
 import { IProperty, WithId } from "@bitmetro/identity";
 import { useRegisterWithEmailAndPassword } from "@/state/identity";
 import Link from "next/link";
-import { useRouter } from "next/router";
-import { createForwardUrl, getForwardUrl } from "@/utils";
+import { getForwardUrl } from "@/utils";
+import { useReturnWithAccessToken } from "@/hooks/return.hook";
 
 interface Props {
   property: WithId<IProperty>;
 }
 
 export const RegisterWithEmailAndPassword: React.FC<Props> = ({ property }) => {
-  const router = useRouter();
+  const returnWithAccessToken = useReturnWithAccessToken();
 
   const {
     control,
@@ -45,7 +45,7 @@ export const RegisterWithEmailAndPassword: React.FC<Props> = ({ property }) => {
 
   useEffect(() => {
     if (registerStatus === "success") {
-      router.push(createForwardUrl(registerResult?.accessToken || ""));
+      returnWithAccessToken(registerResult?.accessToken || "");
     }
   }, [registerStatus]);
 
