@@ -52,7 +52,7 @@ export const useLoginPopup = () => {
   const { setAccessToken } = useAuthState();
 
   const openLoginPopup = (cb: () => void) => {
-    window.open(loginUrl, 'Login', getPopupParams());
+    window.open(loginUrl, 'login', getPopupParams());
 
     window.addEventListener("message", (e) => {
       if (e.origin !== idServiceUrl) return;
