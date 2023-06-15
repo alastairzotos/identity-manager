@@ -34,11 +34,13 @@ export const LoginWithEmailAndPassword: React.FC<Props> = ({ property }) => {
 
   useEffect(() => {
     if (loginStatus === "success") {
+      const accessToken = loginResult?.accessToken || "";
+
       if (!!window.opener) {
-        window.opener.postMessage({ accessToken: loginResult?.accessToken || "" }, '*');
+        window.opener.postMessage({ accessToken }, '*');
         window.close();
       } else {
-        router.push(createForwardUrl(loginResult?.accessToken || ""));
+        router.push(createForwardUrl(accessToken));
       }
     }
   }, [loginStatus]);
