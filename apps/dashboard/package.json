@@ -9,7 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "@bitmetro/app-layout-antd": "1.0.4",
+    "@bitmetro/app-layout-antd": "1.0.5",
     "@bitmetro/auth-react": "*",
     "@bitmetro/create-query": "^0.0.7",
     "@bitmetro/dashboard-models": "*",

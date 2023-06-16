@@ -44,6 +44,13 @@ export class PropertiesController {
     return await this.propertiesService.getByOwnerId(user._id);
   }
 
+  @Get('with-credentials/:id')
+  async getByIdWithCredentials(
+    @Param('id') id: string
+  ) {
+    return await this.propertiesService.getByIdWithCredentials(id);
+  }
+
   @Get(':id')
   @Roles('all')
   async getById(

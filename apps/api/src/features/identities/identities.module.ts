@@ -7,6 +7,7 @@ import { IdentitiesController } from "features/identities/identities.controller"
 import { IdentitiesRepository } from "features/identities/identities.repository";
 import { IdentitiesService } from "features/identities/identities.service";
 import { PropertiesModule } from "features/properties/properties.module";
+import { FacebookOAuthModule } from "integrations/facebook-oauth/facebook-oauth.module";
 import { Identity, IdentitySchema } from "schemas/identity.schema";
 
 @Module({
@@ -15,6 +16,7 @@ import { Identity, IdentitySchema } from "schemas/identity.schema";
     forwardRef(() => PropertiesModule),
     CryptoModule,
     forwardRef(() => ApiKeysModule),
+    FacebookOAuthModule,
     MongooseModule.forFeature([
       { name: Identity.name, schema: IdentitySchema },
     ])

@@ -6,7 +6,7 @@ import Link from "next/link";
 import React, { useEffect } from "react";
 import { useGetPropertiesForOwner } from "@/state/properties.state";
 
-export const PropertiesList: React.FC = () => {
+export const PropertyList: React.FC = () => {
   const [loadStatus, loadProperties, properties] = useGetPropertiesForOwner(s => [s.status, s.request, s.value]);
 
   useEffect(() => {

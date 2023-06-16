@@ -1,8 +1,8 @@
-import { PropertiesList } from "@/components/properties/properties.list";
+import { PropertyList } from "@/components/properties/property.list";
 import { NextPage } from "next";
 
 const PropertiesPage: NextPage = () => {
-  return <PropertiesList />;
+  return <PropertyList />;
 }
 
 PropertiesPage.getInitialProps = () => ({});

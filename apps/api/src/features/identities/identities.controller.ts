@@ -1,5 +1,5 @@
 import { BadRequestException, Body, ConflictException, Controller, ForbiddenException, NotFoundException, Post, Put, UseGuards } from "@nestjs/common";
-import { LoginResponseDto, LoginWithEmailAndPasswordDto, RegisterWithEmailAndPasswordDto, VerifyPasswordDto } from "dtos";
+import { LoginResponseDto, LoginWithEmailAndPasswordDto, LoginWithOAuthDto, RegisterWithEmailAndPasswordDto, VerifyPasswordDto } from "dtos";
 import { AuthGuard } from "features/auth/auth.guard";
 import { Roles } from "features/auth/roles.decorator";
 import { IdentitiesService } from "features/identities/identities.service";
@@ -70,6 +70,20 @@ export class IdentitiesController {
     
     if (result === "wrong-password") {
       throw new ForbiddenException("Password mismatch");
+    }
+
+    return result;
+  }
+
+  @Post('oauth/facebook')
+  @Roles('all')
+  async loginWithFacebook(
+    @Body() { propertyId, accessToken, email, userDetails }: LoginWithOAuthDto
+  ) {
+    const result = await this.identitiesService.loginWithFacebook(propertyId, accessToken, email, userDetails);
+
+    if (result === "invalid-token") {
+      throw new ForbiddenException();
     }
 
     return result;

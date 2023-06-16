@@ -10,6 +10,7 @@ import { mapRecord } from "utils/misc";
 import { Document } from "mongoose";
 import { CryptoService } from "features/crypto/crypto.service";
 import { ApiKeysService } from "features/api-keys/api-keys.services";
+import { FacebookOAuthService } from "integrations/facebook-oauth/facebook-oauth.service";
 
 @Injectable()
 export class IdentitiesService {
@@ -18,6 +19,7 @@ export class IdentitiesService {
     private readonly propertiesService: PropertiesService,
     private readonly cryptoService: CryptoService,
     private readonly apiKeysService: ApiKeysService,
+    private readonly facebookOAuthService: FacebookOAuthService,
     private readonly identitiesRepo: IdentitiesRepository,
   ) { }
 
@@ -101,6 +103,35 @@ export class IdentitiesService {
 
     return {
       accessToken: this.generateAccessToken(identity)
+    }
+  }
+
+  async loginWithFacebook(propertyId: string, accessToken: string, email: string, userDetails: Partial<Record<IUserDetail, string>>): Promise<ILoginResponseDto | "invalid-token" | "no-property"> {
+    const verified = await this.facebookOAuthService.verifyAccessToken(accessToken);
+
+    if (!verified) {
+      return "invalid-token";
+    }
+
+    const property = await this.propertiesService.getById(propertyId);
+
+    if (!property) {
+      return "no-property";
+    }
+
+    let user = await this.identitiesRepo.getByEmail(propertyId, email);
+
+    if (!user) {
+      user = await this.identitiesRepo.create({
+        propertyId,
+        data: property.defaultUserData,
+        details: mapRecord(userDetails as Record<IUserDetail, string>, (value) => value.trim()),
+        email,
+      });
+    }
+
+    return {
+      accessToken: this.generateAccessToken(user)
     }
   }
 

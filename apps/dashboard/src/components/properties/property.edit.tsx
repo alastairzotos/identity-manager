@@ -1,4 +1,4 @@
-import { Input, Select, Switch } from "antd";
+import { Input, Select, Space, Switch } from "antd";
 import React, { useRef } from "react";
 import { SubmitHandler } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -7,6 +7,9 @@ import { IProperty, propertySchema } from "@bitmetro/identity";
 import Editor, { } from '@monaco-editor/react';
 import { ResourceForm } from "@/components/_core/form/resource-form";
 import { FormItem } from "@/components/_core/form/form-item";
+import { LoginModeEmailPassword } from "@/components/properties/_core/login-mode-email-pwd";
+import { LoginModeFacebook } from "@/components/properties/_core/login-mode-facebook";
+import { LoginModeGoogle } from "@/components/properties/_core/login-mode-google";
 
 interface Props {
   errorMessage?: string;
@@ -58,28 +61,11 @@ export const PropertyEditForm: React.FC<Props> = ({ errorMessage, property, save
             control={control}
             errors={errors}
             render={() => (
-              <Select
-                mode="multiple"
-                allowClear
-                style={{ width: '100%' }}
-                placeholder="Select..."
-                value={getValues().loginModes}
-                onChange={(modes) => setValue("loginModes", modes)}
-                options={[
-                  {
-                    label: "Email and password",
-                    value: "email_and_password"
-                  },
-                  {
-                    label: "Google",
-                    value: "google"
-                  },
-                  {
-                    label: "Facebook",
-                    value: "facebook"
-                  },
-                ]}
-              />
+              <Space direction="vertical" style={{ width: '100%' }}>
+                <LoginModeEmailPassword getValues={getValues} setValue={setValue} />
+                <LoginModeFacebook getValues={getValues} setValue={setValue} />
+                <LoginModeGoogle getValues={getValues} setValue={setValue} />
+              </Space>
             )}
           />
 
@@ -151,8 +137,8 @@ export const PropertyEditForm: React.FC<Props> = ({ errorMessage, property, save
             errors={errors}
             render={() => (
               <Switch
-                checkedChildren="dark"
-                unCheckedChildren="light"
+                checkedChildren="Dark"
+                unCheckedChildren="Light"
                 checked={getValues().formTheme === "dark"}
                 onChange={e => setValue("formTheme", e ? "dark" : "light")}
               />

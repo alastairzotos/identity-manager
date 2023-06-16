@@ -16,6 +16,15 @@ export const formTheme = z.enum(["light", "dark"]);
 
 export type IFormTheme = z.infer<typeof formTheme>;
 
+export const propertyCredentials = z.object({
+  fbAppId: z.string().optional(),
+  fbAppSecret: z.string().optional(),
+  googleClientId: z.string().optional(),
+  googleClientSecret: z.string().optional(),
+})
+
+export type IPropertyCredentials = z.infer<typeof propertyCredentials>;
+
 export const propertySchema = z.object({
   ownerId: z.string().optional(),
   name: z.string().trim(),
@@ -25,6 +34,7 @@ export const propertySchema = z.object({
   loginModes: z.array(loginModeSchema),
   formTheme: formTheme,
   logo: z.string().url().trim(),
+  credentials: propertyCredentials.optional(),
 })
 
 export type IProperty = z.infer<typeof propertySchema>;

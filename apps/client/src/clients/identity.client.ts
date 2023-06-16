@@ -1,5 +1,5 @@
 import { httpClient } from "@/clients/http.client";
-import { IRegisterWithEmailAndPasswordDto, ILoginWithEmailAndPasswordDto, ILoginResponseDto } from "@bitmetro/identity";
+import { IRegisterWithEmailAndPasswordDto, ILoginWithEmailAndPasswordDto, ILoginResponseDto, ILoginWithOAuthDto,  } from "@bitmetro/identity";
 
 export const registerWithEmailAndPassword = async (registerData: IRegisterWithEmailAndPasswordDto) => {
   const { data } = await httpClient.put<IRegisterWithEmailAndPasswordDto, { data: ILoginResponseDto }>('/identities/email-and-password', registerData);
@@ -12,3 +12,11 @@ export const loginWithEmailAndPassword = async (loginData: ILoginWithEmailAndPas
 
   return data;
 }
+
+export const loginWithFacebook = async (details: ILoginWithOAuthDto): Promise<string> => {
+  const { data } = await httpClient.post<
+    ILoginWithOAuthDto,
+    { data: ILoginResponseDto }
+  >("/identities/oauth/facebook", details);
+  return data.accessToken;
+};

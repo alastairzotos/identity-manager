@@ -16,7 +16,7 @@ export const BaseContainer: React.FC<React.PropsWithChildren> = ({ children }) =
   }
 
   return (
-    <Paper sx={{ p: 5, height: '100vh' }}>
+    <Paper sx={{ p: 5, pt: 2, height: '100vh' }}>
       {children}
     </Paper>
   )

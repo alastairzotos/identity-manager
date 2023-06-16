@@ -6,10 +6,12 @@ interface Props {
   modeMap: Record<ILoginMode, React.ReactNode>;
 }
 
+const sortOrder: ILoginMode[] = ['google', 'facebook', 'email_and_password'];
+
 export const LoginModesForms: React.FC<Props> = ({ property, modeMap }) => {
   return (
     <>
-      {property.loginModes.map((mode, index) => (
+      {sortOrder.filter(mode => property.loginModes.includes(mode)).map((mode, index) => (
         <Box key={index} sx={{ mt: 2 }}>
           {modeMap[mode]}
         </Box>

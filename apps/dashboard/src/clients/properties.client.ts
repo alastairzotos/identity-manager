@@ -7,7 +7,7 @@ export const getPropertiesForOwner = async () => {
 }
 
 export const getPropertyById = async (id: string) => {
-  const { data } = await httpClient.get<WithId<IProperty>>(`/properties/${id}`);
+  const { data } = await httpClient.get<WithId<IProperty>>(`/properties/with-credentials/${id}`);
   return data;
 }
 

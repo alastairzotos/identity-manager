@@ -54,12 +54,12 @@ export const PropertyContainer: React.FC<Props> = ({ getTitle, children }) => {
                   <img
                     src={property.logo}
                     alt={`${property.name} logo`}
-                    width={64}
-                    height={64}
+                    width={55}
+                    height={55}
                   />
                 )}
 
-                <Typography variant="h5" sx={{ ml: 2 }}>{getTitle(property)}</Typography>
+                <Typography variant="h6" sx={{ ml: 2 }}>{getTitle(property)}</Typography>
               </Box>
 
               {children(property)}

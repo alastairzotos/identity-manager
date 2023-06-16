@@ -14,31 +14,31 @@ export class CryptoService {
     return randomBytes(length).toString('hex');
   }
 
-  // encrypt(value: string) {
-  //   const key = this.getEncryptionKey();
+  encrypt(value: string) {
+    const key = this.getEncryptionKey();
 
-  //   const bytes = aes.utils.utf8.toBytes(value);
+    const bytes = aes.utils.utf8.toBytes(value);
 
-  //   const aesCtr = new aes.ModeOfOperation.ctr(key, new aes.Counter(5));
-  //   const encryptedBytes = aesCtr.encrypt(bytes);
+    const aesCtr = new aes.ModeOfOperation.ctr(key, new aes.Counter(5));
+    const encryptedBytes = aesCtr.encrypt(bytes);
 
-  //   const encryptedHex = aes.utils.hex.fromBytes(encryptedBytes);
+    const encryptedHex = aes.utils.hex.fromBytes(encryptedBytes);
 
-  //   return encryptedHex;
-  // }
+    return encryptedHex;
+  }
 
-  // decrypt(cipher: string) {
-  //   const key = this.getEncryptionKey();
+  decrypt(cipher: string) {
+    const key = this.getEncryptionKey();
 
-  //   const encryptedBytes = aes.utils.hex.toBytes(cipher);
+    const encryptedBytes = aes.utils.hex.toBytes(cipher);
 
-  //   const aesCtr = new aes.ModeOfOperation.ctr(key, new aes.Counter(5));
-  //   const decryptedBytes = aesCtr.decrypt(encryptedBytes);
+    const aesCtr = new aes.ModeOfOperation.ctr(key, new aes.Counter(5));
+    const decryptedBytes = aesCtr.decrypt(encryptedBytes);
 
-  //   const decryptedText = aes.utils.utf8.fromBytes(decryptedBytes);
+    const decryptedText = aes.utils.utf8.fromBytes(decryptedBytes);
 
-  //   return decryptedText;
-  // }
+    return decryptedText;
+  }
 
   async hashPassword(password: string) {
     return await bcrypt.hash(password, 10);
@@ -48,8 +48,8 @@ export class CryptoService {
     return await bcrypt.compare(password, hashedPassword);
   }
 
-  // private getEncryptionKey() {
-  //   return aes.utils.hex.toBytes(this.envService.get().aesKey);
-  // }
+  private getEncryptionKey() {
+    return aes.utils.hex.toBytes(this.envService.get().aesKey);
+  }
 }
 

@@ -1,7 +1,7 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: false,
-  transpilePackages: ["@bitmetro/auth-react"],
+  transpilePackages: ["@bitmetro/auth-react", "@bitmetro/app-layout-antd"],
   images: {
     
   },

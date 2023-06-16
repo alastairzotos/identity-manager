@@ -33,7 +33,7 @@ export function FormBase<T extends FieldValues>({
       disabled={saveStatus === 'fetching'}
       onFinish={onSave}
       {...(fixColumns ? fixedColumns : {})}
-      style={{ width: 600 }}
+      style={{ width: 800 }}
     >
       {!!errorMessage && (
         <Alert

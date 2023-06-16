@@ -1,5 +1,5 @@
 import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
-import { IFormTheme, ILoginMode, IProperty, IUserDetail } from "@bitmetro/identity"
+import { IFormTheme, ILoginMode, IProperty, IPropertyCredentials, IUserDetail } from "@bitmetro/identity"
 
 @Schema({ collection: 'properties' })
 export class Property implements IProperty {
@@ -26,6 +26,9 @@ export class Property implements IProperty {
 
   @Prop({ type: String })
   logo: string;
+  
+  @Prop({ type: Object })
+  credentials?: IPropertyCredentials;
 }
 
 export const PropertySchema = SchemaFactory.createForClass(Property);

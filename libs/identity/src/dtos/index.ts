@@ -30,3 +30,12 @@ export const loginWithEmailAndPasswordDto = z.object({
 })
 
 export type ILoginWithEmailAndPasswordDto = z.infer<typeof loginWithEmailAndPasswordDto>;
+
+export const loginWithOAuthDto = z.object({
+  propertyId: z.string(),
+  accessToken: z.string(),
+  email: z.string(),
+  userDetails: identityDetailsSchema,
+})
+
+export type ILoginWithOAuthDto = z.infer<typeof loginWithOAuthDto>;
