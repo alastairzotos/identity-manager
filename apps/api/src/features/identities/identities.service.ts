@@ -1,4 +1,4 @@
-import { IIdentity, ILoginResponseDto, IUserDetail } from "@bitmetro/identity";
+import { IIdentity, ILoginResponseDto, IProperty, IUserDetail, WithId } from "@bitmetro/identity";
 import { Injectable } from "@nestjs/common";
 import * as jwt from 'jsonwebtoken';
 
@@ -11,6 +11,9 @@ import { Document } from "mongoose";
 import { CryptoService } from "features/crypto/crypto.service";
 import { ApiKeysService } from "features/api-keys/api-keys.services";
 import { FacebookOAuthService } from "integrations/facebook-oauth/facebook-oauth.service";
+import { GoogleOAuthService } from "integrations/google-oauth/google-oauth.service";
+import { Property } from "schemas/property.schema";
+import { IOAuthVerifier } from "models";
 
 @Injectable()
 export class IdentitiesService {
@@ -20,6 +23,7 @@ export class IdentitiesService {
     private readonly cryptoService: CryptoService,
     private readonly apiKeysService: ApiKeysService,
     private readonly facebookOAuthService: FacebookOAuthService,
+    private readonly googleOAuthService: GoogleOAuthService,
     private readonly identitiesRepo: IdentitiesRepository,
   ) { }
 
@@ -106,24 +110,34 @@ export class IdentitiesService {
     }
   }
 
-  async loginWithFacebook(propertyId: string, accessToken: string, email: string, userDetails: Partial<Record<IUserDetail, string>>): Promise<ILoginResponseDto | "invalid-token" | "no-property"> {
-    const verified = await this.facebookOAuthService.verifyAccessToken(accessToken);
+  async loginWithFacebook(accessToken: string, propertyId: string) {
+    return await this.loginWithOAuth(accessToken, propertyId, this.facebookOAuthService);
+  }
 
-    if (!verified) {
-      return "invalid-token";
-    }
+  async loginWithGoogle(accessToken: string, propertyId: string) {
+    return await this.loginWithOAuth(accessToken, propertyId, this.googleOAuthService);
+  }
 
+  private async loginWithOAuth(accessToken: string, propertyId: string, verifier: IOAuthVerifier): Promise<ILoginResponseDto | "invalid-token" | "no-property"> {
     const property = await this.propertiesService.getById(propertyId);
 
     if (!property) {
       return "no-property";
     }
 
-    let user = await this.identitiesRepo.getByEmail(propertyId, email);
+    const details = await verifier.verifyAccessToken(accessToken, property.userDetails);
+
+    if (!details) {
+      return "invalid-token";
+    }
+
+    const { email, userDetails } = details;
+
+    let user = await this.identitiesRepo.getByEmail(property._id.toString(), email);
 
     if (!user) {
       user = await this.identitiesRepo.create({
-        propertyId,
+        propertyId: property._id.toString(),
         data: property.defaultUserData,
         details: mapRecord(userDetails as Record<IUserDetail, string>, (value) => value.trim()),
         email,

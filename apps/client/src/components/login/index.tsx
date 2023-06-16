@@ -18,7 +18,7 @@ const LoginFormInner: React.FC<{ property: WithId<IProperty> }> = ({ property })
         modeMap={{
           email_and_password: <LoginWithEmailAndPassword property={property} />,
           facebook: <FacebookLoginButton property={property} />,
-          google: <GoogleLoginButton />,
+          google: <GoogleLoginButton property={property} />,
         }}
       />
 

@@ -23,6 +23,6 @@
       "@/*": ["./src/*"]
     }
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "../dashboard/src/state/api-key.ts", "../dashboard/src/clients/api-key.client.ts"],
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "../dashboard/src/state/api-key.ts", "../dashboard/src/clients/api-key.client.ts", "../../libs/identity/src/utils/facebook.ts"],
   "exclude": ["node_modules"]
 }

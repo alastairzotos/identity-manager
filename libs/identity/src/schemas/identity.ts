@@ -8,6 +8,8 @@ export const timestamps = {
 
 export const identityDetailsSchema = z.record(userDetailSchema, z.string());
 
+export type IUserDetails = z.infer<typeof identityDetailsSchema>;
+
 export const identitySchema = z.object({
   propertyId: z.string(),
   details: z.record(userDetailSchema, z.string()),

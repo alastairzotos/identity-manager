@@ -1,4 +1,4 @@
-import { BadRequestException, Body, ConflictException, Controller, ForbiddenException, NotFoundException, Post, Put, UseGuards } from "@nestjs/common";
+import { BadRequestException, Body, ConflictException, Controller, NotFoundException, Post, Put, UnauthorizedException, UseGuards } from "@nestjs/common";
 import { LoginResponseDto, LoginWithEmailAndPasswordDto, LoginWithOAuthDto, RegisterWithEmailAndPasswordDto, VerifyPasswordDto } from "dtos";
 import { AuthGuard } from "features/auth/auth.guard";
 import { Roles } from "features/auth/roles.decorator";
@@ -69,7 +69,7 @@ export class IdentitiesController {
     }
     
     if (result === "wrong-password") {
-      throw new ForbiddenException("Password mismatch");
+      throw new UnauthorizedException("Password mismatch");
     }
 
     return result;
@@ -78,12 +78,26 @@ export class IdentitiesController {
   @Post('oauth/facebook')
   @Roles('all')
   async loginWithFacebook(
-    @Body() { propertyId, accessToken, email, userDetails }: LoginWithOAuthDto
+    @Body() { accessToken, propertyId }: LoginWithOAuthDto
   ) {
-    const result = await this.identitiesService.loginWithFacebook(propertyId, accessToken, email, userDetails);
+    const result = await this.identitiesService.loginWithFacebook(accessToken, propertyId);
 
     if (result === "invalid-token") {
-      throw new ForbiddenException();
+      throw new UnauthorizedException();
+    }
+
+    return result;
+  }
+
+  @Post('oauth/google')
+  @Roles('all')
+  async loginWithGoogle(
+    @Body() { accessToken, propertyId }: LoginWithOAuthDto
+  ) {
+    const result = await this.identitiesService.loginWithGoogle(accessToken, propertyId);
+
+    if (result === "invalid-token") {
+      throw new UnauthorizedException();
     }
 
     return result;

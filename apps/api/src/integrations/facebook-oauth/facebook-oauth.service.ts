@@ -1,14 +1,24 @@
+import { IUserDetail, facebookFieldsToUserDetails, userDetailsToFacebookFields } from "@bitmetro/identity";
 import { Injectable } from "@nestjs/common"
 import axios from 'axios';
+import { IOAuthVerificationDetails, IOAuthVerifier } from 'models';
 
 @Injectable()
-export class FacebookOAuthService {
-  async verifyAccessToken(accessToken: string): Promise<boolean> {
+export class FacebookOAuthService implements IOAuthVerifier {
+  async verifyAccessToken(accessToken: string, userDetails: IUserDetail[]): Promise<IOAuthVerificationDetails | null> {
     try {
-      await axios.get(`https://graph.facebook.com/me?access_token=${accessToken}`);
-      return true;
+      const result = (await axios.get(
+        `https://graph.facebook.com/me?access_token=${accessToken}&fields=${userDetailsToFacebookFields(userDetails)}`
+      )).data;
+
+      const { email, ...details } = result;
+
+      return {
+        email,
+        userDetails: facebookFieldsToUserDetails(details),
+      }
     } catch {
-      return false;
+      return null;
     }
   }
 }

@@ -9,6 +9,7 @@ import { AuthModule } from 'features/auth/auth.module';
 import { CryptoModule } from 'features/crypto/crypto.module';
 import { HealthModule } from 'features/health/health.module';
 import { FacebookOAuthModule } from 'integrations/facebook-oauth/facebook-oauth.module';
+import { GoogleOAuthModule } from 'integrations/google-oauth/google-oauth.module';
 import { IdentitiesModule } from 'features/identities/identities.module';
 import { PropertiesModule } from 'features/properties/properties.module';
 import { ZodValidationPipe } from 'nestjs-zod';
@@ -24,6 +25,7 @@ import { ZodValidationPipe } from 'nestjs-zod';
     CryptoModule,
     ApiKeysModule,
     FacebookOAuthModule,
+    GoogleOAuthModule,
     MongooseModule.forRootAsync({
       imports: [EnvironmentModule],
       inject: [EnvironmentService],

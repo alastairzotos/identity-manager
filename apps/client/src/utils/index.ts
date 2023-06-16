@@ -14,3 +14,6 @@ const socialLogins: ILoginMode[] = ["facebook", "google"];
 
 export const usesSocialLogin = (modes: ILoginMode[]) =>
   !!socialLogins.find(socialLogin => modes.includes(socialLogin));
+
+export const errorString = (e: any) =>
+  e?.response?.data?.message || e?.message || JSON.stringify(e);

@@ -2,5 +2,5 @@ export const mapRecord = <K extends string, V = number>(obj: Record<K, V>, mappe
   Object.keys(obj)
     .reduce((acc, key) => ({
       ...acc,
-      [key]: mapper(obj[key])
+      [key]: !!obj[key] ? mapper(obj[key]) : obj[key]
     }), {} as Record<K, V>)

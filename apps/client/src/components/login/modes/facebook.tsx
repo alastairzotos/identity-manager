@@ -5,9 +5,9 @@ import { ReactFacebookLoginInfo, ReactFacebookFailureResponse } from "react-face
 import FacebookLogin from 'react-facebook-login/dist/facebook-login-render-props'
 import { IProperty, WithId } from "@bitmetro/identity";
 import { useStatus } from "@/hooks/status.hook";
-import { facebookFieldsToUserInfo, userDetailsToFacebookFields } from "@/utils/facebook";
 import { loginWithFacebook } from "@/clients/identity.client";
 import { useReturnWithAccessToken } from "@/hooks/return.hook";
+import { errorString } from "@/utils";
 
 interface Props {
   property: WithId<IProperty>;
@@ -25,15 +25,13 @@ export const FacebookLoginButton: React.FC<Props> = ({ property }) => {
 
       try {
         const accessToken = await loginWithFacebook({
-          propertyId: property._id,
           accessToken: info.accessToken,
-          email: info.email!,
-          userDetails: facebookFieldsToUserInfo(info),
+          propertyId: property._id,
         })
 
         returnWithAccessToken(accessToken);
       } catch (e) {
-        setStatus("error", (e as any)?.message || JSON.stringify(e))
+        setStatus("error", errorString(e))
       }
     }
   }
@@ -46,7 +44,6 @@ export const FacebookLoginButton: React.FC<Props> = ({ property }) => {
     <FacebookLogin
       buttonStyle={{ width: "100%" }}
       appId={property.credentials?.fbAppId}
-      fields={"email," + userDetailsToFacebookFields(property.userDetails)}
       callback={handleLogin}
 
       render={({ onClick }) => (
