@@ -51,7 +51,7 @@ export const useLoginPopup = () => {
   const { idServiceUrl, localStorageKey } = useAuthContext();
   const { setAccessToken } = useAuthState();
 
-  const openLoginPopup = (cb: () => void) => {
+  const openLoginPopup = (cb?: () => void) => {
     window.open(loginUrl, 'login', getPopupParams());
 
     window.addEventListener("message", (e) => {
@@ -59,7 +59,7 @@ export const useLoginPopup = () => {
 
       if (typeof e.data.accessToken === "string") {
         setAccessToken(localStorageKey, e.data.accessToken);
-        cb();
+        cb?.();
       }
     }, false);
   }
